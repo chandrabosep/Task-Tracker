@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import prisma from "@/lib/prisma";
 import CreateCollectionBtn from "@/components/CreateCollectionBtn";
+import CollectionCard from "@/components/CollectionCard";
 
 export default async function Home() {
   return (
@@ -53,12 +54,12 @@ function CollectionLoading() {
 
 async function CollectionList() {
   const user = await currentUser();
-  const collections = await prisma?.collection.findMany({
+  const collections = await prisma.collection.findMany({
     where: {
       userId: user?.id,
     },
   });
-  if (collections?.length === 0) {
+  if (collections.length === 0) {
     return (
       <div className="flex flex-col gap-5 ">
         <Alert>
@@ -71,4 +72,13 @@ async function CollectionList() {
       </div>
     );
   }
+
+  return (
+    <div>
+      <CreateCollectionBtn />
+      {collections.map((collection) => (
+        <CollectionCard key={collection.id} collection={collection} />
+      ))}
+    </div>
+  );
 }

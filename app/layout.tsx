@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import NavBar from "@/components/NavBar";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function RootLayout({
   children,
@@ -21,6 +22,7 @@ export default function RootLayout({
               <Separator />
               <main className="flex flex-grow w-full items-center justify-center">
                 {children}
+                <Toaster />
               </main>
             </div>
           </ThemeProvider>

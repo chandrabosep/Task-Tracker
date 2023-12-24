@@ -34,6 +34,10 @@ import { CollectionColors } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
+import { createCollection } from "@/actions/collections";
+import { toast, useToast } from "./ui/use-toast";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { useRouter } from "next/navigation";
 
 interface Props {
   open: boolean;
@@ -46,9 +50,31 @@ export const CreateCollectionSheet = ({ open, handelOpenChange }: Props) => {
     resolver: zodResolver(createCollectionSchema),
   });
 
+  const { toast } = useToast();
+  const router = useRouter();
+
   // data is having type called createCollectionSchemaType
-  const onSubmit = (data: createCollectionSchemaType) => {
-    console.log(data);
+  const onSubmit = async (data: createCollectionSchemaType) => {
+    try {
+      await createCollection(data);
+      {
+        openChnageWrapper(false);
+        router.refresh();
+        toast({
+          title: "Success",
+          description: "Collection created successfully",
+        });
+      }
+    } catch (error) {
+      {
+        toast({
+          title: "Error",
+          description: "Something went wrong. Please try again",
+          variant: "destructive",
+        });
+      }
+      console.log(error);
+    }
   };
 
   const openChnageWrapper = (open: boolean) => {
@@ -57,7 +83,7 @@ export const CreateCollectionSheet = ({ open, handelOpenChange }: Props) => {
   };
 
   return (
-    <Sheet open={open} onOpenChange={handelOpenChange}>
+    <Sheet open={open} onOpenChange={openChnageWrapper}>
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Add new collection</SheetTitle>
@@ -77,7 +103,7 @@ export const CreateCollectionSheet = ({ open, handelOpenChange }: Props) => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Name" {...field} />
+                    <Input placeholder="Personal" {...field} />
                   </FormControl>
                   <FormDescription>Collection name</FormDescription>
                   <FormMessage />
@@ -133,6 +159,7 @@ export const CreateCollectionSheet = ({ open, handelOpenChange }: Props) => {
         <div className="flex flex-col gap-3 mt-4">
           <Separator />
           <Button
+            disabled={form.formState.isSubmitting}
             variant={"outline"}
             onClick={form.handleSubmit(onSubmit)}
             className={cn(
@@ -142,6 +169,9 @@ export const CreateCollectionSheet = ({ open, handelOpenChange }: Props) => {
             )}
           >
             Confirm
+            {form.formState.isSubmitting && (
+              <ReloadIcon className="ml-2 h-4 w-4 animate-spin" />
+            )}
           </Button>
         </div>
       </SheetContent>
