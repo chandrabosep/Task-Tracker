@@ -1,9 +1,12 @@
 export enum CollectionColors {
-  sunset = "bg-gradient-to-r from-sky-500 to-indigo-500",
-  sunset2 = "bg-gradient-to-r from-sky-700 to-indigo-700",
-  sunset3 = "bg-gradient-to-r from-sky-900 to-indigo-900",
-  sunset4 = "bg-gradient-to-r from-sky-400 to-indigo-400",
-  sunset5 = "bg-gradient-to-r from-sky-300 to-indigo-300",
+  sunset = "bg-gradient-to-r from-red-500 to-orange-500",
+  poppy = "bg-gradient-to-r from-rose-400 to-red-500",
+  rosebud = "bg-gradient-to-r from-violet-500 to-purple-500",
+  snowflake = "bg-gradient-to-r from-indigo-400 to-cyan-400",
+  candy = "bg-gradient-to-r from-yellow-400 via-pink-500 to-red-500",
+  firtree = "bg-gradient-to-r from-emerald-500 to-emerald-900",
+  metal = "bg-gradient-to-r from-slate-500 to-slate-800",
+  powder = "bg-gradient-to-r from-violet-500 to-pink-300",
 }
 
 export type CollectionColor = keyof typeof CollectionColors;

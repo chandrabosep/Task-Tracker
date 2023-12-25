@@ -12,7 +12,7 @@ function CreateCollectionBtn() {
     <div className="w-full rounded-md bg-gradient-to-r from-red-500 to-orange-500 p-[1px]">
       <Button
         variant="outline"
-        className="w-full dark:bg-neutral-950 dark:hover:bg-neutral-900"
+        className="w-full dark:bg-neutral-950 dark:hover:bg-neutral-900 bg-white"
         onClick={() => handelOpenChange(true)}
       >
         <span className="bg-gradient-to-r from-red-500 to-orange-500 hover:to-orange-700 bg-clip-text text-transparent">
