@@ -1,5 +1,5 @@
 "use client";
-import { Collection } from "@prisma/client";
+import { Collection, Task } from "@prisma/client";
 import React, { useState, useTransition } from "react";
 import {
   Collapsible,
@@ -9,7 +9,12 @@ import {
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { CollectionColor, CollectionColors } from "@/lib/constants";
-import { CaretDownIcon, PlusIcon, TrashIcon } from "@radix-ui/react-icons";
+import {
+  CaretDownIcon,
+  CaretUpIcon,
+  PlusIcon,
+  TrashIcon,
+} from "@radix-ui/react-icons";
 import { Progress } from "./ui/progress";
 import { Separator } from "./ui/separator";
 import {
@@ -26,16 +31,19 @@ import { AlertDialogCancel } from "@radix-ui/react-alert-dialog";
 import { deleteCollection } from "@/actions/collections";
 import { toast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
+import CreateTaskDialog from "./CreateTaskDialog";
 
 interface Props {
-  collection: Collection;
+  collection: Collection & {
+    tasks: Task[];
+  };
 }
 
 export default function CollectionCard({ collection }: Props) {
   const [isOpen, setIsOpen] = useState(true);
-  const tasks: string[] = ["task 1", "task 2"];
   const router = useRouter();
   const [isLoading, startTransition] = useTransition();
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   const removeCollection = async () => {
     try {
@@ -55,6 +63,11 @@ export default function CollectionCard({ collection }: Props) {
   };
   return (
     <>
+      <CreateTaskDialog
+        open={showCreateModal}
+        setOpen={setShowCreateModal}
+        collection={collection}
+      />
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger asChild>
           <Button
@@ -67,17 +80,17 @@ export default function CollectionCard({ collection }: Props) {
           >
             <span className="terxt-white font-bold">{collection.name}</span>
             {!isOpen && <CaretDownIcon className="w-6 h-6" />}
-            {isOpen && <CaretDownIcon className="w-6 h-6" />}
+            {isOpen && <CaretUpIcon className="w-6 h-6" />}
           </Button>
         </CollapsibleTrigger>
         <CollapsibleContent className="flex rounded-b-md flex-col dark:bg-neutral-900 shadow-lg">
-          {tasks.length === 0 && <div>No tasks</div>}
-          {tasks.length > 0 && (
+          {collection.tasks.length === 0 && <div className="p-4">No tasks</div>}
+          {collection.tasks.length > 0 && (
             <>
               <Progress className="rounded-none" value={50} />
               <div className="p-4 gap-3 flex flex-col">
-                {tasks.map((task) => (
-                  <div>mocked task</div>
+                {collection.tasks.map((task) => (
+                  <div key={task.id}>{task.content}</div>
                 ))}
               </div>
             </>
@@ -90,7 +103,10 @@ export default function CollectionCard({ collection }: Props) {
               <div>
                 <div>
                   <Button variant={"ghost"} size={"icon"}>
-                    <PlusIcon className="w-4 h-4" />
+                    <PlusIcon
+                      className="w-4 h-4"
+                      onClick={() => setShowCreateModal(true)}
+                    />
                   </Button>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>

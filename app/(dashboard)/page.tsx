@@ -21,7 +21,7 @@ export default async function Home() {
 
 async function Page() {
   const user = await currentUser();
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   if (!user) {
     return <div>error</div>;
@@ -55,6 +55,9 @@ function CollectionLoading() {
 async function CollectionList() {
   const user = await currentUser();
   const collections = await prisma.collection.findMany({
+    include: {
+     tasks: true, 
+    },
     where: {
       userId: user?.id,
     },

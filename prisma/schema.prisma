@@ -17,5 +17,22 @@ model Collection {
   color String
   createdAt DateTime @default(now())
 
+  tasks Task[]
+
   @@unique([name,userId])
+}
+  //  @relation: This annotation defines the relationship between Collection and Task models, 
+  //  specifying the fields (collectionId in Task and id in Collection) and the cascade behavior
+  //  for deletions (i.e., when a Collection is deleted, associated Task records are also deleted).
+
+model Task {
+  id Int @id @default(autoincrement())
+  content String
+  userId String
+  done Boolean @default(false)
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+
+  collectionId Int
+  Collection Collection @relation(fields: [collectionId], references: [id],onDelete: Cascade)
 }
