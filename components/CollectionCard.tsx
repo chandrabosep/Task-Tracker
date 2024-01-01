@@ -32,6 +32,7 @@ import { deleteCollection } from "@/actions/collections";
 import { toast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
 import CreateTaskDialog from "./CreateTaskDialog";
+import TaskCard from "./TaskCard";
 
 interface Props {
   collection: Collection & {
@@ -84,13 +85,29 @@ export default function CollectionCard({ collection }: Props) {
           </Button>
         </CollapsibleTrigger>
         <CollapsibleContent className="flex rounded-b-md flex-col dark:bg-neutral-900 shadow-lg">
-          {collection.tasks.length === 0 && <div className="p-4">No tasks</div>}
+          {collection.tasks.length === 0 && (
+            <Button
+              variant={"ghost"}
+              className="flex font-medium items-center justify-center gap-1 p-8 py-12 rounded-none"
+              onClick={() => setShowCreateModal(true)}
+            >
+              <p>There are no tasks yet:</p>
+              <span
+                className={cn(
+                  "text-sm bg-clip-text text-transparent",
+                  CollectionColors[collection.color as CollectionColor]
+                )}
+              >
+                Create one
+              </span>
+            </Button>
+          )}
           {collection.tasks.length > 0 && (
             <>
-              <Progress className="rounded-none" value={50} />
+              <Progress className="rounded-none" value={45} />
               <div className="p-4 gap-3 flex flex-col">
                 {collection.tasks.map((task) => (
-                  <div key={task.id}>{task.content}</div>
+                  <TaskCard key={task.id} task={task}/>
                 ))}
               </div>
             </>
