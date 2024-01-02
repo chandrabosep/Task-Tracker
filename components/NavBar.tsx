@@ -13,7 +13,7 @@ const NavBar = () => {
   }, []);
   return (
     <nav className="w-full px-6  h-16 flex items-center justify-between ">
-      <p>NavBar</p>
+      <p className="text-2xl font-semibold">TaskTracker</p>
       <div className="flex items-center gap-3">
         <UserButton afterSignOutUrl="/" />
         <Tabs defaultValue="dark">
